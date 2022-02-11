@@ -3690,8 +3690,10 @@ function bb_media_user_can_access( $id, $type, $attachment_id = 0 ) {
 
 				$is_admin = groups_is_user_admin( $current_user_id, $media_group_id );
 				$is_mod   = groups_is_user_mod( $current_user_id, $media_group_id );
+				// is current user still member of the group ?
+				$is_member = groups_is_user_member($current_user_id, $media_group_id);
 
-				if ( $media_user_id === $current_user_id || $is_admin ) {
+				if ( $media_user_id === $current_user_id && $is_member|| $is_admin ) {
 					$can_view     = true;
 					$can_download = true;
 					$can_add      = true;
