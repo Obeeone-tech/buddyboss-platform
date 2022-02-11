@@ -1629,11 +1629,13 @@ function bp_activity_user_can_delete( $activity = false ) {
 		if ( bp_current_user_can( 'bp_moderate' ) ) {
 			$can_delete = true;
 		}
+		 // @oli-bee is current usr member of the group ? 
+		$is_member = groups_is_user_member( $activity->user_id, $activity->item_id );
 
 		// Users are allowed to delete their own activity. This is actually
 		// quite powerful, because doing so also deletes all comments to that
 		// activity item. We should revisit this eventually.
-		if ( isset( $activity->user_id ) && ( $activity->user_id === bp_loggedin_user_id() ) ) {
+		if ( isset( $activity->user_id ) && ( $activity->user_id === bp_loggedin_user_id() ) && $is_member ) {
 			$can_delete = true;
 		}
 
@@ -1683,9 +1685,10 @@ function bp_activity_user_can_edit( $activity = false, $privacy_edit = false ) {
 
 	// Only logged in users can edit activity and Activity must be of type 'activity_update', 'activity_comment'
 	if ( is_user_logged_in() && in_array( $activity->type, array( 'activity_update', 'activity_comment' ) ) ) {
-
+         // @oli-bee is current usr member of the group ? 
+		$is_member = groups_is_user_member( $activity->user_id, $activity->item_id );
 		// Users are allowed to edit their own activity.
-		if ( isset( $activity->user_id ) && ( bp_loggedin_user_id() === $activity->user_id ) ) {
+		if ( isset( $activity->user_id ) && ( bp_loggedin_user_id() === $activity->user_id ) && $is_member ) {
 			$can_edit = true;
 		}
 
